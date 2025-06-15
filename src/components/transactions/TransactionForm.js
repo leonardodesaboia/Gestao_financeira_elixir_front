@@ -18,10 +18,10 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
     setLoading(true);
 
     try {
-      const endpoint = transaction 
-        ? `/transactions/${transaction.id}` 
+      const endpoint = transaction
+        ? `/transactions/${transaction.id}`
         : '/transactions';
-      
+
       const method = transaction ? 'PUT' : 'POST';
 
       // Formatação dos dados para enviar para a API
@@ -29,7 +29,7 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
         transaction: {
           description: formData.description,
           value: parseFloat(formData.value),
-          type: formData.type.toUpperCase(),
+          type: formData.type.toLowerCase(),
           date: formData.date + 'T00:00:00Z',
           tag_ids: formData.tag_ids
         }
@@ -55,7 +55,7 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
     const newTagIds = formData.tag_ids.includes(tagId)
       ? formData.tag_ids.filter(id => id !== tagId)
       : [...formData.tag_ids, tagId];
-    
+
     setFormData({ ...formData, tag_ids: newTagIds });
   };
 
@@ -71,7 +71,7 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
           <input
             type="text"
             value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             className="input"
             placeholder="Ex: Salário, Supermercado, Combustível..."
             required
@@ -86,7 +86,7 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
               step="0.01"
               min="0"
               value={formData.value}
-              onChange={(e) => setFormData({...formData, value: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, value: e.target.value })}
               className="input"
               placeholder="0,00"
               required
@@ -97,11 +97,11 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
             <label className="form-label">Tipo</label>
             <select
               value={formData.type}
-              onChange={(e) => setFormData({...formData, type: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               className="input"
             >
-              <option value="RECEITA">Receita</option>
-              <option value="DESPESA">Despesa</option>
+              <option value="receita">Receita</option>
+              <option value="despesa">Despesa</option>
             </select>
           </div>
         </div>
@@ -111,7 +111,7 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
           <input
             type="date"
             value={formData.date}
-            onChange={(e) => setFormData({...formData, date: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
             className="input"
             required
           />

@@ -18,20 +18,20 @@ const Dashboard = ({ user, onLogout }) => {
     try {
       setError(null);
       setLoading(true);
-      
+
       console.log('Carregando dados...');
-      
+
       const [transactionsData, tagsData] = await Promise.all([
         request('/transactions'),
         request('/tags')
       ]);
-      
+
       console.log('Dados carregados:', { transactionsData, tagsData });
-      
+
       // Garantir que são arrays
-      setTransactions(Array.isArray(transactionsData) ? transactionsData : []);
-      setTags(Array.isArray(tagsData) ? tagsData : []);
-      
+      setTransactions(Array.isArray(transactionsData.data) ? transactionsData.data : []);
+      setTags(Array.isArray(tagsData.data) ? tagsData.data : []);
+
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
       setError(error.message);
@@ -44,14 +44,14 @@ const Dashboard = ({ user, onLogout }) => {
 
   useEffect(() => {
     loadData();
-  }, [loadData]);
+  }, []);
 
   const totalReceitas = transactions
-    .filter(t => t.type === 'RECEITA')
+    .filter(t => t.type === 'receita')
     .reduce((sum, t) => sum + parseFloat(t.value || 0), 0);
 
   const totalDespesas = transactions
-    .filter(t => t.type === 'DESPESA')
+    .filter(t => t.type === 'despesa')
     .reduce((sum, t) => sum + parseFloat(t.value || 0), 0);
 
   const saldo = totalReceitas - totalDespesas;
@@ -69,17 +69,17 @@ const Dashboard = ({ user, onLogout }) => {
       <div className="dashboard">
         <Header user={user} onLogout={onLogout} />
         <div className="container" style={{ padding: '40px 20px', textAlign: 'center' }}>
-          <div style={{ 
-            backgroundColor: '#f8d7da', 
-            color: '#721c24', 
-            padding: '20px', 
+          <div style={{
+            backgroundColor: '#f8d7da',
+            color: '#721c24',
+            padding: '20px',
             borderRadius: '8px',
             marginBottom: '20px'
           }}>
             <h3>Erro ao carregar dados</h3>
             <p>{error}</p>
           </div>
-          <button 
+          <button
             onClick={loadData}
             className="btn btn-primary"
           >
@@ -93,7 +93,7 @@ const Dashboard = ({ user, onLogout }) => {
   return (
     <div className="dashboard">
       <Header user={user} onLogout={onLogout} />
-      
+
       <div className="dashboard-content">
         <div className="container">
           {/* Navegação */}
@@ -117,7 +117,7 @@ const Dashboard = ({ user, onLogout }) => {
           {/* Conteúdo das abas */}
           <div className="tab-content">
             {activeTab === 'dashboard' && (
-              <DashboardContent 
+              <DashboardContent
                 totalReceitas={totalReceitas}
                 totalDespesas={totalDespesas}
                 saldo={saldo}
@@ -126,7 +126,7 @@ const Dashboard = ({ user, onLogout }) => {
             )}
 
             {activeTab === 'transactions' && (
-              <TransactionsContent 
+              <TransactionsContent
                 transactions={transactions}
                 tags={tags}
                 onUpdate={loadData}
@@ -134,7 +134,7 @@ const Dashboard = ({ user, onLogout }) => {
             )}
 
             {activeTab === 'tags' && (
-              <TagsContent 
+              <TagsContent
                 tags={tags}
                 onUpdate={loadData}
               />

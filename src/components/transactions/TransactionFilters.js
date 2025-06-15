@@ -40,14 +40,14 @@ const TransactionFilters = ({ tags, selectedTags, onTagFilter, selectedType, onT
               Todos
             </button>
             <button
-              onClick={() => onTypeFilter('RECEITA')}
-              className={`type-filter-btn receita ${selectedType === 'RECEITA' ? 'active' : ''}`}
+              onClick={() => onTypeFilter('receita')}
+              className={`type-filter-btn receita ${selectedType === 'receita' ? 'active' : ''}`}
             >
               Receitas
             </button>
             <button
-              onClick={() => onTypeFilter('DESPESA')}
-              className={`type-filter-btn despesa ${selectedType === 'DESPESA' ? 'active' : ''}`}
+              onClick={() => onTypeFilter('despesa')}
+              className={`type-filter-btn despesa ${selectedType === 'despesa' ? 'active' : ''}`}
             >
               Despesas
             </button>
