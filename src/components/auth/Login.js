@@ -23,7 +23,7 @@ const Login = ({ onLogin }) => {
         alert('Usuário criado com sucesso! Faça login.');
         setIsRegister(false);
       } else {
-        const response = await request('/auth/login', {
+        const response = await request('/users/login', {
           method: 'POST',
           body: { email, password }
         });
@@ -42,7 +42,7 @@ const Login = ({ onLogin }) => {
         <h2 className="login-title">
           {isRegister ? 'Cadastrar' : 'Login'}
         </h2>
-        
+
         <form onSubmit={handleSubmit} className="login-form">
           {isRegister && (
             <div className="form-group">
@@ -56,7 +56,7 @@ const Login = ({ onLogin }) => {
               />
             </div>
           )}
-          
+
           <div className="form-group">
             <label className="form-label">Email</label>
             <input
@@ -67,7 +67,7 @@ const Login = ({ onLogin }) => {
               required
             />
           </div>
-          
+
           <div className="form-group">
             <label className="form-label">Senha</label>
             <input
@@ -78,7 +78,7 @@ const Login = ({ onLogin }) => {
               required
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={loading}
@@ -87,7 +87,7 @@ const Login = ({ onLogin }) => {
             {loading ? 'Carregando...' : (isRegister ? 'Cadastrar' : 'Entrar')}
           </button>
         </form>
-        
+
         <div className="login-toggle">
           <button
             onClick={() => setIsRegister(!isRegister)}

@@ -63,18 +63,18 @@ const TransactionsContent = ({ transactions, tags, onUpdate }) => {
             {transactions.map((transaction) => (
               <tr key={transaction.id}>
                 <td className="transaction-description">
-                  {transaction.descricao}
+                  {transaction.description}
                 </td>
                 <td>
-                  <span className={`transaction-type ${transaction.tipo.toLowerCase()}`}>
-                    {transaction.tipo}
+                  <span className={`transaction-type ${transaction.type.toLowerCase()}`}>
+                    {transaction.type}
                   </span>
                 </td>
                 <td className="transaction-value">
-                  R$ {parseFloat(transaction.valor).toFixed(2)}
+                  R$ {parseFloat(transaction.value).toFixed(2)}
                 </td>
                 <td className="transaction-date">
-                  {new Date(transaction.data).toLocaleDateString('pt-BR')}
+                  {new Date(transaction.date).toLocaleDateString('pt-BR')}
                 </td>
                 <td className="transaction-actions">
                   <button

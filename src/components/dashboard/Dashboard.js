@@ -23,8 +23,8 @@ const Dashboard = ({ user, onLogout }) => {
         request('/transactions'),
         request('/tags')
       ]);
-      setTransactions(transactionsData);
-      setTags(tagsData);
+      setTransactions(transactionsData.data);
+      setTags(tagsData.data);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
     } finally {
@@ -33,12 +33,12 @@ const Dashboard = ({ user, onLogout }) => {
   };
 
   const totalReceitas = transactions
-    .filter(t => t.tipo === 'RECEITA')
-    .reduce((sum, t) => sum + parseFloat(t.valor || 0), 0);
+    .filter(t => t.type === 'receita')
+    .reduce((sum, t) => sum + parseFloat(t.value || 0), 0);
 
   const totalDespesas = transactions
-    .filter(t => t.tipo === 'DESPESA')
-    .reduce((sum, t) => sum + parseFloat(t.valor || 0), 0);
+    .filter(t => t.type === 'despesa')
+    .reduce((sum, t) => sum + parseFloat(t.value || 0), 0);
 
   const saldo = totalReceitas - totalDespesas;
 
@@ -53,7 +53,7 @@ const Dashboard = ({ user, onLogout }) => {
   return (
     <div className="dashboard">
       <Header user={user} onLogout={onLogout} />
-      
+
       <div className="dashboard-content">
         <div className="container">
           {/* Navegação */}
@@ -77,7 +77,7 @@ const Dashboard = ({ user, onLogout }) => {
           {/* Conteúdo das abas */}
           <div className="tab-content">
             {activeTab === 'dashboard' && (
-              <DashboardContent 
+              <DashboardContent
                 totalReceitas={totalReceitas}
                 totalDespesas={totalDespesas}
                 saldo={saldo}
@@ -86,7 +86,7 @@ const Dashboard = ({ user, onLogout }) => {
             )}
 
             {activeTab === 'transactions' && (
-              <TransactionsContent 
+              <TransactionsContent
                 transactions={transactions}
                 tags={tags}
                 onUpdate={loadData}
@@ -94,7 +94,7 @@ const Dashboard = ({ user, onLogout }) => {
             )}
 
             {activeTab === 'tags' && (
-              <TagsContent 
+              <TagsContent
                 tags={tags}
                 onUpdate={loadData}
               />

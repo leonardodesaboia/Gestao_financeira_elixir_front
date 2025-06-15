@@ -52,7 +52,7 @@ const TagsContent = ({ tags, onUpdate }) => {
           <div key={tag.id} className="tag-card card">
             <div className="tag-info">
               <div className="tag-indicator"></div>
-              <span className="tag-name">{tag.nome}</span>
+              <span className="tag-name">{tag.name}</span>
             </div>
             <div className="tag-actions">
               <button
@@ -75,7 +75,7 @@ const TagsContent = ({ tags, onUpdate }) => {
             </div>
           </div>
         ))}
-        
+
         {tags.length === 0 && (
           <div className="no-tags">
             <i className="fas fa-tags"></i>
