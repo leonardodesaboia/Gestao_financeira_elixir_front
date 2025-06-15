@@ -1,0 +1,190 @@
+.dashboard-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  border-radius: var(--border-radius);
+  border: 1px solid;
+}
+
+.summary-card.receitas {
+  background-color: #f0f9f0;
+  border-color: #c8e6c9;
+}
+
+.summary-card.despesas {
+  background-color: #fef5f5;
+  border-color: #ffcdd2;
+}
+
+.summary-card.saldo-positivo {
+  background-color: #f0f8ff;
+  border-color: #bbdefb;
+}
+
+.summary-card.saldo-negativo {
+  background-color: #fff8e1;
+  border-color: #ffecb3;
+}
+
+.card-icon {
+  font-size: 28px;
+  margin-right: 16px;
+}
+
+.receitas .card-icon {
+  color: var(--success-color);
+}
+
+.despesas .card-icon {
+  color: var(--error-color);
+}
+
+.saldo-positivo .card-icon {
+  color: var(--secondary-blue);
+}
+
+.saldo-negativo .card-icon {
+  color: var(--warning-color);
+}
+
+.card-info {
+  flex: 1;
+}
+
+.card-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.receitas .card-label {
+  color: var(--success-color);
+}
+
+.despesas .card-label {
+  color: var(--error-color);
+}
+
+.saldo-positivo .card-label {
+  color: var(--secondary-blue);
+}
+
+.saldo-negativo .card-label {
+  color: var(--warning-color);
+}
+
+.card-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.receitas .card-value {
+  color: #2e7d32;
+}
+
+.despesas .card-value {
+  color: #c62828;
+}
+
+.saldo-positivo .card-value {
+  color: #1565c0;
+}
+
+.saldo-negativo .card-value {
+  color: #ef6c00;
+}
+
+.recent-transactions {
+  margin-top: 8px;
+}
+
+.section-header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--medium-gray);
+  margin-bottom: 16px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.transaction-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.transaction-indicator.receita {
+  background-color: var(--success-color);
+}
+
+.transaction-indicator.despesa {
+  background-color: var(--error-color);
+}
+
+.transaction-details {
+  flex: 1;
+}
+
+.transaction-description {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.transaction-date {
+  font-size: 12px;
+  color: var(--dark-gray);
+}
+
+.transaction-amount {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.transaction-amount.receita {
+  color: var(--success-color);
+}
+
+.transaction-amount.despesa {
+  color: var(--error-color);
+}

@@ -1,0 +1,19 @@
+.tag-form-container {
+  margin-bottom: 24px;
+}
+
+.tag-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .form-actions {
+    justify-content: stretch;
+  }
+  
+  .form-actions .btn {
+    flex: 1;
+  }
+}

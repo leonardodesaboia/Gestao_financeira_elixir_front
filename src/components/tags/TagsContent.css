@@ -1,0 +1,83 @@
+.tags-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tags-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tags-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.tag-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  transition: var(--transition);
+}
+
+.tag-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.tag-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.tag-indicator {
+  width: 12px;
+  height: 12px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.tag-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.tag-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.no-tags {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--dark-gray);
+}
+
+.no-tags i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.no-tags p {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.no-tags small {
+  font-size: 14px;
+  opacity: 0.7;
+}
