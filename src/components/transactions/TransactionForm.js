@@ -4,10 +4,11 @@ import './TransactionForm.css';
 
 const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
-    descricao: transaction?.descricao || '',
-    valor: transaction?.valor || '',
-    tipo: transaction?.tipo || 'RECEITA',
-    data: transaction?.data || new Date().toISOString().split('T')[0]
+    description: transaction?.description || '',
+    value: transaction?.value || '',
+    type: transaction?.type || 'RECEITA',
+    date: transaction?.date ? transaction.date.split('T')[0] : new Date().toISOString().split('T')[0],
+    tag_ids: transaction?.tags?.map(tag => tag.id) || transaction?.tag_ids || []
   });
   const [loading, setLoading] = useState(false);
   const { request } = useApi();
@@ -23,17 +24,39 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
       
       const method = transaction ? 'PUT' : 'POST';
 
+      // Formatação dos dados para enviar para a API
+      const dataToSend = {
+        transaction: {
+          description: formData.description,
+          value: parseFloat(formData.value),
+          type: formData.type.toUpperCase(),
+          date: formData.date + 'T00:00:00Z',
+          tag_ids: formData.tag_ids
+        }
+      };
+
+      console.log('Enviando dados:', dataToSend);
+
       await request(endpoint, {
         method,
-        body: { transaction: formData }
+        body: dataToSend
       });
 
       onSave();
     } catch (error) {
-      alert('Erro ao salvar transação');
+      console.error('Erro completo:', error);
+      alert('Erro ao salvar transação: ' + error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTagToggle = (tagId) => {
+    const newTagIds = formData.tag_ids.includes(tagId)
+      ? formData.tag_ids.filter(id => id !== tagId)
+      : [...formData.tag_ids, tagId];
+    
+    setFormData({ ...formData, tag_ids: newTagIds });
   };
 
   return (
@@ -47,8 +70,8 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
           <label className="form-label">Descrição</label>
           <input
             type="text"
-            value={formData.descricao}
-            onChange={(e) => setFormData({...formData, descricao: e.target.value})}
+            value={formData.description}
+            onChange={(e) => setFormData({...formData, description: e.target.value})}
             className="input"
             placeholder="Ex: Salário, Supermercado, Combustível..."
             required
@@ -61,8 +84,9 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
             <input
               type="number"
               step="0.01"
-              value={formData.valor}
-              onChange={(e) => setFormData({...formData, valor: e.target.value})}
+              min="0"
+              value={formData.value}
+              onChange={(e) => setFormData({...formData, value: e.target.value})}
               className="input"
               placeholder="0,00"
               required
@@ -72,8 +96,8 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
           <div className="form-group">
             <label className="form-label">Tipo</label>
             <select
-              value={formData.tipo}
-              onChange={(e) => setFormData({...formData, tipo: e.target.value})}
+              value={formData.type}
+              onChange={(e) => setFormData({...formData, type: e.target.value})}
               className="input"
             >
               <option value="RECEITA">Receita</option>
@@ -86,11 +110,51 @@ const TransactionForm = ({ transaction, tags, onSave, onCancel }) => {
           <label className="form-label">Data</label>
           <input
             type="date"
-            value={formData.data}
-            onChange={(e) => setFormData({...formData, data: e.target.value})}
+            value={formData.date}
+            onChange={(e) => setFormData({...formData, date: e.target.value})}
             className="input"
             required
           />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Categorias</label>
+          <div className="tags-selector">
+            {tags.length === 0 ? (
+              <div className="no-tags-available">
+                <p>Nenhuma categoria disponível.</p>
+                <small>Crie categorias na aba "Categorias" primeiro.</small>
+              </div>
+            ) : (
+              <div className="tags-grid">
+                {tags.map((tag) => (
+                  <label key={tag.id} className="tag-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={formData.tag_ids.includes(tag.id)}
+                      onChange={() => handleTagToggle(tag.id)}
+                    />
+                    <span className="tag-label">{tag.name}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+          {formData.tag_ids.length > 0 && (
+            <div className="selected-tags">
+              <small>Selecionadas: {formData.tag_ids.length} categoria(s)</small>
+              <div className="selected-tags-preview">
+                {formData.tag_ids.map(tagId => {
+                  const tag = tags.find(t => t.id === tagId);
+                  return tag ? (
+                    <span key={tagId} className="selected-tag-badge">
+                      {tag.name}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="form-actions">

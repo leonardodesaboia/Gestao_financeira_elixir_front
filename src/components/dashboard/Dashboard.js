@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from '../layout/Header';
 import DashboardContent from './DashboardContent';
 import TransactionsContent from '../transactions/TransactionsContent';
@@ -11,33 +11,47 @@ const Dashboard = ({ user, onLogout }) => {
   const [transactions, setTransactions] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { request } = useApi();
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
+      setError(null);
+      setLoading(true);
+      
+      console.log('Carregando dados...');
+      
       const [transactionsData, tagsData] = await Promise.all([
         request('/transactions'),
         request('/tags')
       ]);
-      setTransactions(transactionsData.data);
-      setTags(tagsData.data);
+      
+      console.log('Dados carregados:', { transactionsData, tagsData });
+      
+      // Garantir que são arrays
+      setTransactions(Array.isArray(transactionsData) ? transactionsData : []);
+      setTags(Array.isArray(tagsData) ? tagsData : []);
+      
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
+      setError(error.message);
+      setTransactions([]);
+      setTags([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [request]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const totalReceitas = transactions
-    .filter(t => t.type === 'receita')
+    .filter(t => t.type === 'RECEITA')
     .reduce((sum, t) => sum + parseFloat(t.value || 0), 0);
 
   const totalDespesas = transactions
-    .filter(t => t.type === 'despesa')
+    .filter(t => t.type === 'DESPESA')
     .reduce((sum, t) => sum + parseFloat(t.value || 0), 0);
 
   const saldo = totalReceitas - totalDespesas;
@@ -45,7 +59,33 @@ const Dashboard = ({ user, onLogout }) => {
   if (loading) {
     return (
       <div className="loading">
-        <div>Carregando...</div>
+        <div>Carregando dados...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="dashboard">
+        <Header user={user} onLogout={onLogout} />
+        <div className="container" style={{ padding: '40px 20px', textAlign: 'center' }}>
+          <div style={{ 
+            backgroundColor: '#f8d7da', 
+            color: '#721c24', 
+            padding: '20px', 
+            borderRadius: '8px',
+            marginBottom: '20px'
+          }}>
+            <h3>Erro ao carregar dados</h3>
+            <p>{error}</p>
+          </div>
+          <button 
+            onClick={loadData}
+            className="btn btn-primary"
+          >
+            Tentar novamente
+          </button>
+        </div>
       </div>
     );
   }
@@ -53,7 +93,7 @@ const Dashboard = ({ user, onLogout }) => {
   return (
     <div className="dashboard">
       <Header user={user} onLogout={onLogout} />
-
+      
       <div className="dashboard-content">
         <div className="container">
           {/* Navegação */}
@@ -77,7 +117,7 @@ const Dashboard = ({ user, onLogout }) => {
           {/* Conteúdo das abas */}
           <div className="tab-content">
             {activeTab === 'dashboard' && (
-              <DashboardContent
+              <DashboardContent 
                 totalReceitas={totalReceitas}
                 totalDespesas={totalDespesas}
                 saldo={saldo}
@@ -86,7 +126,7 @@ const Dashboard = ({ user, onLogout }) => {
             )}
 
             {activeTab === 'transactions' && (
-              <TransactionsContent
+              <TransactionsContent 
                 transactions={transactions}
                 tags={tags}
                 onUpdate={loadData}
@@ -94,7 +134,7 @@ const Dashboard = ({ user, onLogout }) => {
             )}
 
             {activeTab === 'tags' && (
-              <TagsContent
+              <TagsContent 
                 tags={tags}
                 onUpdate={loadData}
               />
@@ -102,6 +142,9 @@ const Dashboard = ({ user, onLogout }) => {
           </div>
         </div>
       </div>
+
+      {/* Componente de Debug - descomente a linha abaixo para ativar */}
+      {/* <DataDebug transactions={transactions} tags={tags} /> */}
     </div>
   );
 };

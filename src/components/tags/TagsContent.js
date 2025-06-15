@@ -75,7 +75,7 @@ const TagsContent = ({ tags, onUpdate }) => {
             </div>
           </div>
         ))}
-
+        
         {tags.length === 0 && (
           <div className="no-tags">
             <i className="fas fa-tags"></i>

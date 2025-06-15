@@ -32,7 +32,7 @@ const DashboardContent = ({ totalReceitas, totalDespesas, saldo, transactions })
           </div>
           <div className="card-info">
             <p className="card-label">Saldo</p>
-            <p className="card-value">R$ {saldo.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</p>
+            <p className="card-value">R$ {totalDespesas.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}</p>
           </div>
         </div>
       </div>
@@ -43,22 +43,46 @@ const DashboardContent = ({ totalReceitas, totalDespesas, saldo, transactions })
           <h3>Transações Recentes</h3>
         </div>
         <div className="transactions-list">
-          {transactions.slice(0, 5).map((transaction) => (
-            <div key={transaction.id} className="transaction-item">
-              <div className="transaction-info">
-                <div className={`transaction-indicator ${transaction.type.toLowerCase()}`}></div>
-                <div className="transaction-details">
-                  <p className="transaction-description">{transaction.description}</p>
-                  <p className="transaction-date">
-                    {new Date(transaction.date).toLocaleDateString('pt-BR')}
-                  </p>
+          {transactions.length === 0 ? (
+            <div className="no-recent-transactions">
+              <i className="fas fa-chart-line"></i>
+              <p>Nenhuma transação encontrada</p>
+              <small>Comece adicionando suas primeiras transações</small>
+            </div>
+          ) : (
+            transactions.slice(0, 5).map((transaction) => (
+              <div key={transaction.id} className="transaction-item">
+                <div className="transaction-info">
+                  <div className={`transaction-indicator ${transaction.type.toLowerCase()}`}></div>
+                  <div className="transaction-details">
+                    <p className="transaction-description">{transaction.description}</p>
+                    <div className="transaction-meta">
+                      <span className="transaction-date">
+                        {new Date(transaction.date).toLocaleDateString('pt-BR')}
+                      </span>
+                      {transaction.tags && transaction.tags.length > 0 && (
+                        <div className="transaction-tags-preview">
+                          {transaction.tags.slice(0, 2).map((tag) => (
+                            <span key={tag.id} className="tag-mini">
+                              {tag.name}
+                            </span>
+                          ))}
+                          {transaction.tags.length > 2 && (
+                            <span className="tag-mini-more">
+                              +{transaction.tags.length - 2}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className={`transaction-amount ${transaction.type.toLowerCase()}`}>
+                  {transaction.type === 'RECEITA' ? '+' : '-'}R$ {parseFloat(transaction.value).toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}
                 </div>
               </div>
-              <div className={`transaction-amount ${transaction.type.toLowerCase()}`}>
-                {transaction.type === 'receita' ? '+' : '-'}R$ {parseFloat(transaction.value).toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' })}
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

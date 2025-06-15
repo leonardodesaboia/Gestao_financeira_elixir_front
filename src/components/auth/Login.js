@@ -22,14 +22,26 @@ const Login = ({ onLogin }) => {
         });
         alert('Usuário criado com sucesso! Faça login.');
         setIsRegister(false);
+        setName('');
+        setPassword('');
       } else {
         const response = await request('/users/login', {
           method: 'POST',
           body: { email, password }
         });
-        onLogin(response.token, response.user);
+        
+        // A resposta pode vir com diferentes formatos
+        const token = response.token || response.jwt || response.access_token;
+        const userData = response.user || response.data || { name: response.name, email: response.email };
+        
+        if (token && userData) {
+          onLogin(token, userData);
+        } else {
+          throw new Error('Resposta de login inválida');
+        }
       }
     } catch (error) {
+      console.error('Erro de login:', error);
       alert('Erro: ' + error.message);
     } finally {
       setLoading(false);
@@ -42,7 +54,7 @@ const Login = ({ onLogin }) => {
         <h2 className="login-title">
           {isRegister ? 'Cadastrar' : 'Login'}
         </h2>
-
+        
         <form onSubmit={handleSubmit} className="login-form">
           {isRegister && (
             <div className="form-group">
@@ -52,11 +64,12 @@ const Login = ({ onLogin }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="input"
+                placeholder="Seu nome completo"
                 required
               />
             </div>
           )}
-
+          
           <div className="form-group">
             <label className="form-label">Email</label>
             <input
@@ -64,10 +77,11 @@ const Login = ({ onLogin }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input"
+              placeholder="seu@email.com"
               required
             />
           </div>
-
+          
           <div className="form-group">
             <label className="form-label">Senha</label>
             <input
@@ -75,22 +89,34 @@ const Login = ({ onLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input"
+              placeholder="Sua senha"
               required
             />
           </div>
-
+          
           <button
             type="submit"
             disabled={loading}
             className="btn btn-primary login-btn"
           >
-            {loading ? 'Carregando...' : (isRegister ? 'Cadastrar' : 'Entrar')}
+            {loading ? (
+              <>
+                <i className="fas fa-spinner fa-spin"></i>
+                {isRegister ? 'Cadastrando...' : 'Entrando...'}
+              </>
+            ) : (
+              isRegister ? 'Cadastrar' : 'Entrar'
+            )}
           </button>
         </form>
-
+        
         <div className="login-toggle">
           <button
-            onClick={() => setIsRegister(!isRegister)}
+            onClick={() => {
+              setIsRegister(!isRegister);
+              setName('');
+              setPassword('');
+            }}
             className="toggle-btn"
           >
             {isRegister ? 'Já tem conta? Faça login' : 'Não tem conta? Cadastre-se'}

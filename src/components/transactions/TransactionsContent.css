@@ -15,16 +15,30 @@
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filtered-count {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-color);
+  background-color: rgba(33, 44, 85, 0.1);
+  padding: 4px 8px;
+  border-radius: 12px;
 }
 
 .transactions-table-container {
   overflow-x: auto;
   padding: 0;
+  position: relative;
 }
 
 .transactions-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 800px;
 }
 
 .transactions-table th {
@@ -37,6 +51,7 @@
   letter-spacing: 0.5px;
   background-color: var(--light-gray);
   border-bottom: 1px solid var(--medium-gray);
+  white-space: nowrap;
 }
 
 .transactions-table td {
@@ -83,6 +98,34 @@
   font-size: 14px;
 }
 
+.transaction-tags {
+  max-width: 200px;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.no-tags {
+  color: var(--dark-gray);
+  font-style: italic;
+  font-size: 12px;
+}
+
 .transaction-actions {
   display: flex;
   gap: 8px;
@@ -119,4 +162,53 @@
 .delete-btn:hover {
   background-color: var(--error-color);
   color: white;
+}
+
+.no-transactions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--dark-gray);
+}
+
+.no-transactions i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.no-transactions p {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.no-transactions small {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .transactions-table-container {
+    border-radius: 0;
+    margin: 0 -20px;
+  }
+  
+  .transactions-table th,
+  .transactions-table td {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  
+  .transaction-tags {
+    max-width: 120px;
+  }
+  
+  .tag-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
 }

@@ -3,7 +3,7 @@ import useApi from '../../hooks/useAPI';
 import './TagForm.css';
 
 const TagForm = ({ tag, onSave, onCancel }) => {
-  const [nome, setNome] = useState(tag?.nome || '');
+  const [name, setName] = useState(tag?.name || '');
   const [loading, setLoading] = useState(false);
   const { request } = useApi();
 
@@ -17,7 +17,7 @@ const TagForm = ({ tag, onSave, onCancel }) => {
 
       await request(endpoint, {
         method,
-        body: { tag: { nome } }
+        body: { tag: { name } }
       });
 
       onSave();
@@ -39,8 +39,8 @@ const TagForm = ({ tag, onSave, onCancel }) => {
           <label className="form-label">Nome da Categoria</label>
           <input
             type="text"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="input"
             placeholder="Ex: Alimentação, Transporte, Lazer..."
             required
